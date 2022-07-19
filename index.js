@@ -1,7 +1,5 @@
 const express = require("express");
 
-const connection = require("./database/connection");
-
 const app = express();
 
 const port = 3000;
@@ -17,6 +15,11 @@ app.use(express.json());
 
 app.use("/books", BookRoutes);
 
+app.listen(port, () => {
+  console.log("API inciada na porta: " + port);
+});
+
+/*
 connection.connect((err) => {
   if (err) {
     console.log(err);
@@ -28,3 +31,4 @@ connection.connect((err) => {
     });
   }
 });
+*/
