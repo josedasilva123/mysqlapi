@@ -10,9 +10,10 @@ router.post('/', (req, res) => {
         return;
     }
 
-    const sql = `INSERT INTO books (title, pageqty) VALUES ('${title}', '${pageqty}')`;
+    const sql = `INSERT INTO books (??, ??) VALUES (?, ?)`;
+    const data = ['title', 'pageqty', title, pageqty];
 
-    pool.query(sql, (err, data) => {
+    pool.query(sql, data, (err, data) => {
         if(err){
             console.log(err);
             res.status(400).json({ error: "Ocorreu um erro ao tentar cadastrar no banco."});
@@ -41,9 +42,10 @@ router.get('/', (req, res) => {
 router.get('/book/:id', (req, res) => {
     const { id } = req.params;
     const sql = `SELECT * FROM books 
-    WHERE id = '${id}%'`
+    WHERE ?? = ?`
+    const data = ['id', id];
 
-    pool.query(sql, (err, data) => {
+    pool.query(sql, data, (err, data) => {
         if(err){
             console.log(err);
             res.status(400).json({ error: "Ocorreu ao tentar recuperar dados do banco."});
@@ -60,10 +62,11 @@ module.exports = router;
 router.get('/search/:title', (req, res) => {
     const { title } = req.params;
     const sql = `SELECT * FROM books 
-    WHERE title LIKE '${title}%'`
+    WHERE ?? LIKE ?`
+    const data = ['title', title];
     
 
-    pool.query(sql, (err, data) => {
+    pool.query(sql, data, (err, data) => {
         if(err){
             console.log(err);
             res.status(400).json({ error: "Ocorreu ao tentar recuperar dados do banco."});
@@ -84,9 +87,11 @@ router.put('/book/:id', (req, res) => {
         return;
     }
 
-    const sql = `UPDATE books SET title = '${title}', pageqty = '${pageqty}' WHERE id = '${id}'`
+    const sql = `UPDATE books SET ?? = ?, ?? = ? WHERE ?? = ?'`
 
-    pool.query(sql, (err, data) => {
+    const data = ['title', title, 'pageqty', pageqty, 'id', id];
+
+    pool.query(sql, data, (err, data) => {
         if(err){
             console.log(err);
             res.status(400).json({ error: "Ocorreu ao tentar atualizar os dados no banco."});
@@ -101,9 +106,11 @@ router.put('/book/:id', (req, res) => {
 router.delete('/book/:id', (req, res) => {
     const { id } = req.params;
 
-    const sql = `DELETE FROM books WHERE id = '${id}'`
+    const sql = `DELETE FROM books WHERE ?? = ?`
+    
+    const data = ['id', id];
 
-    pool.query(sql, (err, data) => {
+    pool.query(sql, data, (err, data) => {
         if(err){
             console.log(err);
             res.status(400).json({ error: "Ocorreu ao tentar remover os itens do banco."});
