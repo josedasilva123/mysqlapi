@@ -90,7 +90,7 @@ router.post("/login", (req, res) => {
             updatedAt: data[0].updatedAt,
         }
 
-        res.status(200).json({ message: "Usuário cadastrado com sucesso!", data: userData });
+        res.status(200).json({ message: "Login realizado com sucesso!", data: userData });
       } else {
         res.status(400).json({ error: 'Usuário não cadastrado.'});
         return;
