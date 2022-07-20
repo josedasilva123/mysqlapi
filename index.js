@@ -5,6 +5,7 @@ const app = express();
 const port = 3000;
 
 const BookRoutes = require("./routes/books");
+const UserRoutes = require("./routes/user");
 
 app.use(
   express.urlencoded({
@@ -14,6 +15,7 @@ app.use(
 app.use(express.json());
 
 app.use("/books", BookRoutes);
+app.use("/user", UserRoutes);
 
 app.listen(port, () => {
   console.log("API inciada na porta: " + port);
