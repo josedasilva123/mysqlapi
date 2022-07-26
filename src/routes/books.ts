@@ -1,8 +1,10 @@
-const router = require("express").Router();
+import { Router, Request, Response } from "express";
+import { MysqlError } from "mysql";
+import pool from "../database/pool";
 
-const pool = require("../database/pool");
+const router = Router();
 
-router.post('/', (req, res) => {
+router.post('/', (req: Request, res: Response) => {
     const { title, pageqty } = req.body;
 
     if(!title || !pageqty){
@@ -24,10 +26,10 @@ router.post('/', (req, res) => {
     })
 })
 
-router.get('/', (req, res) => {
+router.get('/', (req: Request, res: Response) => {
     const sql = `SELECT * FROM books`
 
-    pool.query(sql, (err, data) => {
+    pool.query(sql, (err: MysqlError, data: any) => {
         if(err){
             console.log(err);
             res.status(400).json({ error: "Ocorreu ao tentar recuperar dados do banco."});
@@ -39,7 +41,7 @@ router.get('/', (req, res) => {
 })
 
 /* Get by id */
-router.get('/book/:id', (req, res) => {
+router.get('/book/:id', (req: Request, res: Response) => {
     const { id } = req.params;
     const sql = `SELECT * FROM books 
     WHERE ?? = ?`
@@ -59,7 +61,7 @@ router.get('/book/:id', (req, res) => {
 module.exports = router;
 
 /* Search by title */
-router.get('/search/:title', (req, res) => {
+router.get('/search/:title', (req: Request, res: Response) => {
     const { title } = req.params;
     const sql = `SELECT * FROM books 
     WHERE ?? LIKE ?`
@@ -78,7 +80,7 @@ router.get('/search/:title', (req, res) => {
 })
 
 /* Update */
-router.put('/book/:id', (req, res) => {
+router.put('/book/:id', (req: Request, res: Response) => {
     const { id } = req.params;
     const { title, pageqty } = req.body;   
 
@@ -103,7 +105,7 @@ router.put('/book/:id', (req, res) => {
 })
 
 /* Delete */
-router.delete('/book/:id', (req, res) => {
+router.delete('/book/:id', (req: Request, res: Response) => {
     const { id } = req.params;
 
     const sql = `DELETE FROM books WHERE ?? = ?`
@@ -121,5 +123,4 @@ router.delete('/book/:id', (req, res) => {
     })
 })
 
-
-module.exports = router;
+export default router;

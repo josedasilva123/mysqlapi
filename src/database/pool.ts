@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+import mysql from "mysql";
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -8,4 +8,4 @@ const pool = mysql.createPool({
     database: 'nodemysql'
 })
 
-module.exports = pool;
+export default pool;

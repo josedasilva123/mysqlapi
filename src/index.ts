@@ -1,11 +1,10 @@
-const express = require("express");
+import express from "express";
+import BookRoutes from "./routes/books";
+import UserRoutes from "./routes/user";
 
 const app = express();
 
 const port = 3000;
-
-const BookRoutes = require("./routes/books");
-const UserRoutes = require("./routes/user");
 
 app.use(
   express.urlencoded({
