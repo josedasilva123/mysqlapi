@@ -103,17 +103,15 @@ export default class UserControllers{
             if (!currentUser) {
               throw new Error("Usuário não encontrado.");
             }
-            
-            const verifyPassword = () => {
-              if(currentUser.password){
-                return bcrypt.compareSync(password, currentUser.password);
-              }        
-            }  
-      
-            if (!verifyPassword) {
-              res.status(400).json({ error: "Sua senha está incorreta." });
-              return;
+
+            let verifyPassword;
+            if(currentUser.password){
+              verifyPassword = bcrypt.compareSync(password, currentUser.password);
             }
+            
+            if (!verifyPassword) {
+              throw new Error("Sua senha está incorreta.");
+            }            
       
             const userData = {
               name: currentUser.name,
