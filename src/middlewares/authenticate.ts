@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 export function Authenticate(req: Request, res: Response, next: NextFunction){
     try{
@@ -17,6 +17,7 @@ export function Authenticate(req: Request, res: Response, next: NextFunction){
                 next();
             }            
         })
+        
     } catch (error: any) {
         res.status(400).json({ error: error.message})
     }    
