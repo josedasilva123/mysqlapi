@@ -9,16 +9,20 @@ export function Authenticate(req: Request, res: Response, next: NextFunction){
            throw new Error("Está rota precisa de autorização.") 
         }
 
-        jwt.verify(String(Auth), "hD7gE1VWUsOR5NmRD7CaZ51U1RspgukR", (err, decoded: any) => {
-            if(err){
-                res.status(400).json({ error: "Token inválida"})
-            } else {
-                req.body.id = decoded?.id;
-                next();
-            }            
-        })
-        
+        if(process.env.AUTH_KEY){
+            jwt.verify(String(Auth), process.env.AUTH_KEY , (err, decoded: any) => {
+                if(err){
+                    res.status(400).json({ error: "Token inválida"})
+                } else {
+                    req.body.id = decoded?.id;
+                    next();
+                }            
+            })
+        } else {
+            throw new Error("Erro de autenticação, contate o responsável pela aplicação.")  
+        }
     } catch (error: any) {
         res.status(400).json({ error: error.message})
     }    
 }
+
