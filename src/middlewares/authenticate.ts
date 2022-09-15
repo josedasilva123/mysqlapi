@@ -3,15 +3,15 @@ import jwt from "jsonwebtoken";
 
 export function Authenticate(req: Request, res: Response, next: NextFunction) {
   try {
-    const { Auth } = req.headers;
+    const { Authorization } = req.headers;
 
-    if (!Auth) {
+    if (!Authorization) {
       throw new Error("Está rota precisa de autorização.");
     }
 
     jwt.verify(
-      String(Auth),
-      process.env.AUTH_KEY as string,
+      String(Authorization),
+      process.env.JWT_SECRET as string,
       (err, decoded: any) => {
         if (err) {
           res.status(400).json({ error: "Token inválida" });
