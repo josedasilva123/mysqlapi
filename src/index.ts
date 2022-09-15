@@ -1,7 +1,7 @@
 import sequelize from "./database/pool";
 import { app } from "./server";
 
-const port = 3000;
+const port = 3030;
 
 sequelize.sync().then(() => {
   app.listen(port, () => {
