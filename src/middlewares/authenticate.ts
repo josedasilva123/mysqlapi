@@ -1,28 +1,27 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-export function Authenticate(req: Request, res: Response, next: NextFunction){
-    try{
-        const { Auth } = req.headers;
+export function Authenticate(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { Auth } = req.headers;
 
-        if(!Auth){
-           throw new Error("Está rota precisa de autorização.") 
-        }
+    if (!Auth) {
+      throw new Error("Está rota precisa de autorização.");
+    }
 
-        if(process.env.AUTH_KEY){
-            jwt.verify(String(Auth), process.env.AUTH_KEY , (err, decoded: any) => {
-                if(err){
-                    res.status(400).json({ error: "Token inválida"})
-                } else {
-                    req.body.id = decoded?.id;
-                    next();
-                }            
-            })
+    jwt.verify(
+      String(Auth),
+      process.env.AUTH_KEY as string,
+      (err, decoded: any) => {
+        if (err) {
+          res.status(400).json({ error: "Token inválida" });
         } else {
-            throw new Error("Erro de autenticação, contate o responsável pela aplicação.")  
+          req.body.id = decoded?.id;
+          next();
         }
-    } catch (error: any) {
-        res.status(400).json({ error: error.message})
-    }    
+      }
+    );
+  } catch (error) {
+    res.status(400).json({ error: "Está rota precisa de autorização." });
+  }
 }
-
