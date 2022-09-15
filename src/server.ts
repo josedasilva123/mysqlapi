@@ -1,8 +1,8 @@
 import express from "express";
 import { User } from "./models/User";
 import { Books } from "./models/Books";
-import BookRoutes from "./routes/books";
-import UserRoutes from "./routes/user";
+import BookRoutes from "./routes/books.routes";
+import UserRoutes from "./routes/user.routes";
 
 export const app = express();
 
