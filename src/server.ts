@@ -1,9 +1,10 @@
 import express from "express";
+import { User } from "./models/User";
+import { Books } from "./models/Books";
 import BookRoutes from "./routes/books";
 import UserRoutes from "./routes/user";
 
 export const app = express();
-
 
 app.use(
   express.urlencoded({
@@ -12,8 +13,8 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/books", BookRoutes);
-app.use("/user", UserRoutes);
+//app.use("/books", BookRoutes);
+//app.use("/user", UserRoutes);
 
 
 

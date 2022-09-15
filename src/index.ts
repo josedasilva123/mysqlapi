@@ -1,7 +1,12 @@
+import sequelize from "./database/pool";
 import { app } from "./server";
 
 const port = 3000;
 
-app.listen(port, () => {
+sequelize.sync().then(() => {
+  app.listen(port, () => {
     console.log("API inciada na porta: " + port);
-  });
+  });  
+}).catch((err) => {
+  console.log(err);
+})
