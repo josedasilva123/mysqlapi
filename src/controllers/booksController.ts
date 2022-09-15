@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import pool from "../database/pool";
 import { Books } from "../models/Books";
 
 export default class BooksControllers{
@@ -67,10 +66,12 @@ export default class BooksControllers{
         } 
     }
 
-    static async asyncDelete(req: Request, res: Response) {
+    static async Delete(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const response = await Books.destroy({ where: { id: id }})
+
+            await Books.destroy({ where: { id: id }})
+
             res.status(200).json({ message: "Livro excluído com sucesso!" })
         } catch (error) {
             res.status(400).json({ error: (error as Error).message });
