@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import {
   LoginBody,
@@ -17,7 +18,11 @@ export default class UserControllers {
         throw new Error("Está faltando um parâmetro no body");
       }
 
-      const existingUser = await User.findOne({ where: { email: email } });
+      const existingUser = await User.findOne({
+        raw: true,
+        where: { email: email },
+      });
+      console.log(existingUser);
 
       if (existingUser) {
         throw new Error(
@@ -49,11 +54,13 @@ export default class UserControllers {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        res.status(400).json({ error: "Está faltando um parâmetro no body" });
-        return;
+        throw new Error("Está faltando um parâmetro no body");
       }
 
-      const currentUser = await User.findOne({ raw: true, where: { email: email } })
+      const currentUser = await User.findOne({
+        raw: true,
+        where: { email: email },
+      });
 
       if (!currentUser) {
         throw new Error("Usuário não encontrado.");
@@ -68,6 +75,14 @@ export default class UserControllers {
         throw new Error("Sua senha está incorreta.");
       }
 
+      const token = jwt.sign(
+        {
+          id: currentUser.id,
+        },
+        process.env.JWT_SECRET as string,
+        { expiresIn: "12h" }
+      );
+
       const userData = {
         name: currentUser.name,
         email: currentUser.email,
@@ -75,7 +90,13 @@ export default class UserControllers {
         updatedAt: currentUser.updatedAt,
       };
 
-      res.status(200).json({ message: "Login realizado com sucesso!", data: userData });
+      res.status(200).json({
+        message: "Login realizado com sucesso!",
+        data: {
+          user: userData,
+          token: token,
+        },
+      });
     } catch (error) {
       res.status(400).json({ error: (error as Error).message });
     }
