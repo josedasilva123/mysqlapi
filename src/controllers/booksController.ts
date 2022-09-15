@@ -1,118 +1,79 @@
 import { Request, Response } from "express";
-import { MysqlError } from "mysql";
 import pool from "../database/pool";
+import { Books } from "../models/Books";
 
 export default class BooksControllers{
-    static Register(req: Request, res: Response) {
-        const { title, pageqty } = req.body;
+    static async Register(req: Request, res: Response) {
+        try {
+            const { title, pageqty } = req.body;
     
-        if(!title || !pageqty){
-            res.status(400).json({ error: "Está faltando um parâmetro no body"});
-            return;
-        }
-    
-        const sql = `INSERT INTO books (??, ??) VALUES (?, ?)`;
-        const data = ['title', 'pageqty', title, pageqty];
-    
-        pool.query(sql, data, (err, data) => {
-            if(err){
-                console.log(err);
-                res.status(400).json({ error: "Ocorreu um erro ao tentar cadastrar no banco."});
+            if(!title || !pageqty){
+                res.status(400).json({ error: "Está faltando um parâmetro no body"});
                 return;
-            } else {
-                res.status(200).json({ message: "Livro cadastrado com sucesso!", data: data})
             }
-        })
-    }
-
-    static GetAll(req: Request, res: Response) {
-        const sql = `SELECT * FROM books`
-    
-        pool.query(sql, (err: MysqlError, data: any) => {
-            if(err){
-                console.log(err);
-                res.status(400).json({ error: "Ocorreu ao tentar recuperar dados do banco."});
-                return;
-            } else {
-                res.status(200).json({ data: data })
-            } 
-        })
-    }
-
-    static GetById(req: Request, res: Response) {
-        const { id } = req.params;
-        const sql = `SELECT * FROM books 
-        WHERE ?? = ?`
-        const data = ['id', id];
-    
-        pool.query(sql, data, (err, data) => {
-            if(err){
-                console.log(err);
-                res.status(400).json({ error: "Ocorreu ao tentar recuperar dados do banco."});
-                return;
-            } else {
-                res.status(200).json({ data: data })
-            } 
-        })
-    }
-
-    static GetByTitle(req: Request, res: Response) {
-        const { title } = req.params;
-        const sql = `SELECT * FROM books 
-        WHERE ?? LIKE ?`
-        const data = ['title', title];
         
-    
-        pool.query(sql, data, (err, data) => {
-            if(err){
-                console.log(err);
-                res.status(400).json({ error: "Ocorreu ao tentar recuperar dados do banco."});
-                return;
-            } else {
-                res.status(200).json({ data: data })
-            } 
-        })
+            await Books.create({ title, pageqty });
+
+            res.status(200).json({ message: "Livro criado com sucesso!"})
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+        }  
     }
 
-    static Update(req: Request, res: Response) {
-        const { id } = req.params;
-        const { title, pageqty } = req.body;   
-    
-        if(!title || !pageqty){
-            res.status(400).json({ error: "Está faltando um parâmetro no body"});
-            return;
-        }
-    
-        const sql = `UPDATE books SET ?? = ?, ?? = ? WHERE ?? = ?'`
-    
-        const data = ['title', title, 'pageqty', pageqty, 'id', id];
-    
-        pool.query(sql, data, (err, data) => {
-            if(err){
-                console.log(err);
-                res.status(400).json({ error: "Ocorreu ao tentar atualizar os dados no banco."});
-                return;
-            } else {
-                res.status(200).json({ data: data })
-            } 
-        })
+    static async GetAll(req: Request, res: Response) { 
+        try {
+            const response = await Books.findAll({ raw: true });
+
+            res.status(200).json({ data: response })
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+        } 
     }
 
-    static Delete(req: Request, res: Response) {
-        const { id } = req.params;
-    
-        const sql = `DELETE FROM books WHERE ?? = ?`
-        
-        const data = ['id', id];
-    
-        pool.query(sql, data, (err, data) => {
-            if(err){
-                console.log(err);
-                res.status(400).json({ error: "Ocorreu ao tentar remover os itens do banco."});
-                return;
-            } else {
-                res.status(200).json({ data: data })
-            } 
-        })
+    static async GetById(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+
+            const response = await Books.findOne({ raw: true, where: { id: id }});
+
+            res.status(200).json({ data: response })
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+        } 
+    }
+
+    static async GetByTitle(req: Request, res: Response) {
+        try {
+            const { title } = req.params;
+
+            const response = await Books.findOne({ raw: true, where: { title: title }});
+
+            res.status(200).json({ data: response })
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+        } 
+    }
+
+    static async Update(req: Request, res: Response) {
+        try{
+            const { id } = req.params;
+            const { title, pageqty } = req.body; 
+
+            const response = await Books.update({ title, pageqty}, { where: { id: id }});
+
+            res.status(200).json({ data: response });
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+        } 
+    }
+
+    static async asyncDelete(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const response = await Books.destroy({ where: { id: id }})
+            res.status(200).json({ message: "Livro excluído com sucesso!" })
+        } catch (error) {
+            res.status(400).json({ error: (error as Error).message });
+        }        
     }
 }
