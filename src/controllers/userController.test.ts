@@ -2,18 +2,6 @@ import request from "supertest";
 import { app } from "../server";
 
 describe("Rota de registro POST", () => {
-  test("Verificando erro do body", async () => {
-    await request(app)
-      .post("/user/register")
-      .send({
-        name: "Alex Conder",
-        email: "alex.v.conder@gmail.com",
-      })
-      .expect(400, { error: "Está faltando um parâmetro no body" });
-  });
-});
-
-describe("Rota de registro POST", () => {
   test("Tentativa de cadastrar usuário existente", async () => {
     await request(app)
       .post("/user/register")
