@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Books } from "../models/Books";
+import { Books } from "../../models/Books";
 
 export default class BooksControllers{
     static async Create(req: Request, res: Response) {

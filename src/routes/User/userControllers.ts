@@ -6,8 +6,8 @@ import {
   LoginErrorResponse,
   LoginSucessResponse,
   RegisterBody,
-} from "../interfaces/users";
-import { User } from "../models/User";
+} from "../../interfaces/users";
+import { User } from "../../models/User";
 
 export default class UserControllers {
   static async Register(req: Request<{}, {}, RegisterBody, {}>, res: Response) {

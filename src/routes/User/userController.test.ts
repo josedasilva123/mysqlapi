@@ -1,5 +1,23 @@
 import request from "supertest";
-import { app } from "../server";
+import { app } from "../../server";
+
+describe("Rota de registro POST", () => {
+  test("Tentativa de cadastrar com body faltando atributo.", async () => {
+    await request(app)
+      .post("/user/register")
+      .send({
+        name: "Alex Conder",
+        email: "email@email.com.br",
+      })
+      .expect(422, {
+        "errors": [
+          {
+            "password": "A senha (password) é obrigatória e precisa ser do tipo string"
+          }
+        ]
+      });
+  })
+})
 
 describe("Rota de registro POST", () => {
   test("Tentativa de cadastrar usuário existente", async () => {

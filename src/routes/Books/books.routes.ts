@@ -1,5 +1,5 @@
 import { Router } from "express";
-import BooksControllers from "../../controllers/booksController";
+import BooksControllers from "./booksController";
 import { Authenticate } from "../../middlewares/authenticate";
 import { Validate } from "../../middlewares/handleValidation";
 import { bookCreateValidation, bookDeleteValidation, bookGetByIdValidation, bookGetByTitleValidation, bookUpdateValidation } from "./booksValidations";
