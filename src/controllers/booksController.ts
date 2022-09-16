@@ -2,14 +2,9 @@ import { Request, Response } from "express";
 import { Books } from "../models/Books";
 
 export default class BooksControllers{
-    static async Register(req: Request, res: Response) {
+    static async Create(req: Request, res: Response) {
         try {
             const { title, pageqty } = req.body;
-    
-            if(!title || !pageqty){
-                res.status(400).json({ error: "Está faltando um parâmetro no body"});
-                return;
-            }
         
             await Books.create({ title, pageqty });
 
@@ -58,7 +53,7 @@ export default class BooksControllers{
             const { id } = req.params;
             const { title, pageqty } = req.body; 
 
-            const response = await Books.update({ title, pageqty}, { where: { id: id }});
+            const response = await Books.update({ title, pageqty }, { where: { id: id }});
 
             res.status(200).json({ data: response });
         } catch (error) {
