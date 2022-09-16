@@ -14,10 +14,6 @@ export default class UserControllers {
     try {
       const { name, email, password } = req.body;
 
-      if (!name || !email || !password) {
-        throw new Error("Está faltando um parâmetro no body");
-      }
-
       const existingUser = await User.findOne({
         raw: true,
         where: { email: email },
@@ -52,10 +48,6 @@ export default class UserControllers {
   ) {
     try {
       const { email, password } = req.body;
-
-      if (!email || !password) {
-        throw new Error("Está faltando um parâmetro no body");
-      }
 
       const currentUser = await User.findOne({
         raw: true,
