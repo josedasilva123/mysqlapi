@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { LoginBody, RegisterBody } from "../../interfaces/users";
 
+
 export default class UserServices {
   static async Register(body: RegisterBody){
     const { name, email, password } = body;
@@ -30,7 +31,7 @@ export default class UserServices {
 
       return { message: "Usuário cadastrado com sucesso!" };
   }
-  
+
   static async Login(body: LoginBody) {
     const { email, password } = body;
 
