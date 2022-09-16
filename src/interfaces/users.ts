@@ -17,9 +17,14 @@ export interface CurrentUser{
     updatedAt: Date;
 }
 
+interface LoginSucessResponseData{
+    user: CurrentUser;
+    token: string;
+}
+
 export interface LoginSucessResponse{
     message: string;
-    data: CurrentUser;
+    data: LoginSucessResponseData;
 }
 
 export interface LoginErrorResponse{

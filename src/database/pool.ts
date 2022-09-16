@@ -1,3 +1,12 @@
+import { Sequelize } from "sequelize";
+
+const sequelize = new Sequelize('nodemysql', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+})
+
+export default sequelize;
+/*
 import mysql from "mysql";
 
 const pool = mysql.createPool({
@@ -9,3 +18,4 @@ const pool = mysql.createPool({
 })
 
 export default pool;
+*/
