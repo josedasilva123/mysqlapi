@@ -5,8 +5,8 @@ import { userLoginValidation, userRegisterValidation } from "./userValidations";
 
 const router = Router();
 
-router.post("/register", Validate, userRegisterValidation(), UserControllers.Register);
+router.post("/register", userRegisterValidation(), Validate, UserControllers.Register);
 
-router.post("/login", Validate, userLoginValidation(), UserControllers.Login);
+router.post("/login", userLoginValidation(), Validate, UserControllers.Login);
 
 export default router;

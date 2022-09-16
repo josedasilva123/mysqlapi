@@ -6,16 +6,16 @@ import { bookCreateValidation, bookDeleteValidation, bookGetByIdValidation, book
 
 const router = Router();
 
-router.post('/', Validate, bookCreateValidation(), Authenticate, BooksControllers.Create)
+router.post('/', bookCreateValidation(), Validate, Authenticate, BooksControllers.Create)
 
 router.get('/', BooksControllers.GetAll)
 
-router.get('/book/:id', Validate, bookGetByIdValidation(), BooksControllers.GetById)
+router.get('/book/:id', bookGetByIdValidation(), Validate, BooksControllers.GetById)
 
-router.get('/search/:title', Validate, bookGetByTitleValidation(), BooksControllers.GetByTitle)
+router.get('/search/:title', bookGetByTitleValidation(), Validate, BooksControllers.GetByTitle)
 
-router.put('/book/:id', Validate, bookUpdateValidation(), Authenticate, BooksControllers.Update)
+router.put('/book/:id', bookUpdateValidation(), Validate, Authenticate, BooksControllers.Update)
 
-router.delete('/book/:id', Validate, bookDeleteValidation(), Authenticate, BooksControllers.Delete);
+router.delete('/book/:id', bookDeleteValidation(), Validate, Authenticate, BooksControllers.Delete);
 
 export default router;
